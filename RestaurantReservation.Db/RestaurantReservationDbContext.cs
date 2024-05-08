@@ -24,7 +24,7 @@ namespace RestaurantReservation.Db
         {
             modelBuilder.Entity<OrderItem>()
                 .HasOne(p => p.MenuItem)
-                .WithMany()
+                .WithMany(p => p.Items)
                 .HasForeignKey(p => p.ItemId);
             // Seed data for Customers
 

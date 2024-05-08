@@ -3,7 +3,7 @@ using RestaurantReservation.Db;
 
 namespace RestaurantReservation
 {
-    internal class OrderItemRepository
+    public class OrderItemRepository
     {
         private readonly RestaurantReservationDbContext _context;
         public OrderItemRepository(RestaurantReservationDbContext context)

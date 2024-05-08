@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantReservation
 {
-    internal class RestaurantRepository
+    public class RestaurantRepository
     {
         private readonly RestaurantReservationDbContext _context;
         public RestaurantRepository(RestaurantReservationDbContext context)
