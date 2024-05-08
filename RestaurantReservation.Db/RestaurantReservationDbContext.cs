@@ -21,7 +21,7 @@ namespace RestaurantReservation.Db
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-              "Data Source = (localdb)\\KHALEDSALEH; Initial Catalog = RestaurantReservationCore"
+              "Data Source=KHALEDSALEH;Initial Catalog=RestaurantReservationCore;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False"
             );
         }
     }
