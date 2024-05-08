@@ -33,7 +33,7 @@ namespace RestaurantReservation.Db
                 .WithMany()
                 .HasForeignKey(p => p.ItemId);
             // Seed data for Customers
-            /*
+
             modelBuilder.Entity<Customer>().HasData(
                 new Customer { CustomerId = 1, First_Name = "Alice", Last_Name = "Johnson", Email = "alice.johnson@example.com", Phone_number = "123-456-7890" },
                 new Customer { CustomerId = 2, First_Name = "Bob", Last_Name = "Smith", Email = "bob.smith@example.com", Phone_number = "123-456-7891" },
@@ -103,7 +103,7 @@ namespace RestaurantReservation.Db
                 new Order { OrderId = 4, Order_date = DateTime.Now.AddDays(-4), Total_amount = 30.00, ReservationId = 4, EmployeeId = 4 },
                 new Order { OrderId = 5, Order_date = DateTime.Now.AddDays(-5), Total_amount = 25.00, ReservationId = 5, EmployeeId = 5 }
             );
-            */
+
         }
     }
 }
