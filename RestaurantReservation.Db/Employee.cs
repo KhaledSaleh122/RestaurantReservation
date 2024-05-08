@@ -10,6 +10,8 @@ namespace RestaurantReservation.Db
     public class Employee
     {
         public int EmployeeId { get; set; }
+        public int RestaurantId { get; set; }
+
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
         public int Position { get; set; }
