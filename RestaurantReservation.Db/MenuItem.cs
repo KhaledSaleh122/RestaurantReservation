@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantReservation.Db
 {
-    internal class MenuItem
+    public class MenuItem
     {
         public int Item_id { get; set; }
         public int Restaurant_id { get; set; }
