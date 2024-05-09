@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace RestaurantReservation.Db
 {
+    public enum Position
+    {
+        Normal = 1,
+        Manager = 2
+
+    }
     public class Employee
     {
         public int EmployeeId { get; set; }
@@ -14,7 +20,7 @@ namespace RestaurantReservation.Db
 
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
-        public int Position { get; set; }
+        public Position Position { get; set; }
         public List<Order> Orders { get; set; } = new List<Order>();
         public Restaurant Restaurant { get; set; }
     }

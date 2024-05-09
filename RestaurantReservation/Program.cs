@@ -4,6 +4,12 @@ using RestaurantReservation.Db;
 
 RestaurantReservationDbContext dbContext = new RestaurantReservationDbContext();
 
+await ListManagers();
+async Task ListManagers()
+{
+    var manager
+}
+////
 var customerRepository = new CustomerRepository(dbContext);
 //await CreateCustomer();
 async Task CreateCustomer()
@@ -57,14 +63,14 @@ var employeeRepository = new EmployeeRepository(dbContext);
 //await CreateEmployee();
 async Task CreateEmployee()
 {
-    await employeeRepository.CreateEmployeeAsync(new Employee { First_Name = "John", Last_Name = "Doe", Position = 1, RestaurantId = 1 });
+    await employeeRepository.CreateEmployeeAsync(new Employee { First_Name = "John", Last_Name = "Doe", Position = Position.Manegar, RestaurantId = 1 });
     Console.WriteLine("Employee added");
 }
 
 //await UpdateEmployee();
 async Task UpdateEmployee()
 {
-    await employeeRepository.UpdateEmployeeAsync(new Employee { EmployeeId = 6, First_Name = "John", Last_Name = "Doe", Position = 2, RestaurantId = 2 });
+    await employeeRepository.UpdateEmployeeAsync(new Employee { EmployeeId = 6, First_Name = "John", Last_Name = "Doe", Position = Position.Normal, RestaurantId = 2 });
     Console.WriteLine("Employee information updated");
 }
 
@@ -176,7 +182,6 @@ async Task DeleteOrder()
 }
 
 ///////////////////////
-
 var orderItemRepository = new OrderItemRepository(dbContext);
 
 //await CreateOrderItem();
@@ -199,5 +204,3 @@ async Task DeleteOrderItem()
     await orderItemRepository.DeleteOrderItemAsync(6);
     Console.WriteLine("OrderItem Deleted");
 }
-
-

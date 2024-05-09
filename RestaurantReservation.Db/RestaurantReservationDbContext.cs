@@ -46,11 +46,11 @@ namespace RestaurantReservation.Db
 
             // Seed data for Employees
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { EmployeeId = 1, First_Name = "Olivia", Last_Name = "Miller", Position = 1, RestaurantId = 1 },
-                new Employee { EmployeeId = 2, First_Name = "Noah", Last_Name = "Davis", Position = 2, RestaurantId = 2 },
-                new Employee { EmployeeId = 3, First_Name = "Liam", Last_Name = "Garcia", Position = 1, RestaurantId = 3 },
-                new Employee { EmployeeId = 4, First_Name = "Sophia", Last_Name = "Rodriguez", Position = 2, RestaurantId = 4 },
-                new Employee { EmployeeId = 5, First_Name = "Mason", Last_Name = "Martinez", Position = 1, RestaurantId = 5 }
+                new Employee { EmployeeId = 1, First_Name = "Olivia", Last_Name = "Miller", Position = Position.Manegar, RestaurantId = 1 },
+                new Employee { EmployeeId = 2, First_Name = "Noah", Last_Name = "Davis", Position = Position.Normal, RestaurantId = 2 },
+                new Employee { EmployeeId = 3, First_Name = "Liam", Last_Name = "Garcia", Position = Position.Manegar, RestaurantId = 3 },
+                new Employee { EmployeeId = 4, First_Name = "Sophia", Last_Name = "Rodriguez", Position = Position.Normal, RestaurantId = 4 },
+                new Employee { EmployeeId = 5, First_Name = "Mason", Last_Name = "Martinez", Position = Position.Manegar, RestaurantId = 5 }
             );
 
             // Seed data for Tables
