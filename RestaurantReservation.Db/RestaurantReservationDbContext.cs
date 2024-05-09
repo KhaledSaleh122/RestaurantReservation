@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace RestaurantReservation.Db
 {
@@ -12,7 +13,10 @@ namespace RestaurantReservation.Db
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<CustomerReservationsRestaurants> CustomerReservationsRestaurants { get; set; }
 
+        public DbSet<TotalRevenueForRestaurant> TotalRevenueForRestaurants { get; set; }
+        public DbSet<EmployeesRestaurant> EmployeesRestaurant { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
@@ -22,6 +26,9 @@ namespace RestaurantReservation.Db
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TotalRevenueForRestaurant>().HasNoKey();
+            modelBuilder.Entity<CustomerReservationsRestaurants>().HasNoKey().ToView("CustomerReservationsRestaurants");
+            modelBuilder.Entity<EmployeesRestaurant>().HasNoKey().ToView("EmployeesRestaurant");
             modelBuilder.Entity<OrderItem>()
                 .HasOne(p => p.MenuItem)
                 .WithMany(p => p.Items)
@@ -46,11 +53,11 @@ namespace RestaurantReservation.Db
 
             // Seed data for Employees
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { EmployeeId = 1, First_Name = "Olivia", Last_Name = "Miller", Position = Position.Manegar, RestaurantId = 1 },
+                new Employee { EmployeeId = 1, First_Name = "Olivia", Last_Name = "Miller", Position = Position.Manager, RestaurantId = 1 },
                 new Employee { EmployeeId = 2, First_Name = "Noah", Last_Name = "Davis", Position = Position.Normal, RestaurantId = 2 },
-                new Employee { EmployeeId = 3, First_Name = "Liam", Last_Name = "Garcia", Position = Position.Manegar, RestaurantId = 3 },
+                new Employee { EmployeeId = 3, First_Name = "Liam", Last_Name = "Garcia", Position = Position.Manager, RestaurantId = 3 },
                 new Employee { EmployeeId = 4, First_Name = "Sophia", Last_Name = "Rodriguez", Position = Position.Normal, RestaurantId = 4 },
-                new Employee { EmployeeId = 5, First_Name = "Mason", Last_Name = "Martinez", Position = Position.Manegar, RestaurantId = 5 }
+                new Employee { EmployeeId = 5, First_Name = "Mason", Last_Name = "Martinez", Position = Position.Manager, RestaurantId = 5 }
             );
 
             // Seed data for Tables

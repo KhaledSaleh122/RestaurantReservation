@@ -36,5 +36,12 @@ namespace RestaurantReservation
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<double> GetTotalRevenueByRestaurant(int restaurantId)
+        {
+            var totalRevenue = await _context.TotalRevenueForRestaurants.FromSqlInterpolated($"SELECT dbo.CalculateTotalRevenueByRestaurant({restaurantId}) AS TotalRevenue").FirstOrDefaultAsync();
+            return totalRevenue.TotalRevenue;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,15 @@ namespace RestaurantReservation
                 _context.Reservations.Remove(reservation);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<Customer>> GetCustomersWithLargeReservations(int partySize)
+        {
+            var customers = await _context.Customers
+                .FromSqlInterpolated($"EXEC dbo.GetCustomersWithLargeReservations {partySize}")
+                .ToListAsync();
+
+            return customers;
         }
 
     }

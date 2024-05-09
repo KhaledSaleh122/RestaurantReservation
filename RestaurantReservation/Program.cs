@@ -1,14 +1,105 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Microsoft.EntityFrameworkCore;
 using RestaurantReservation;
 using RestaurantReservation.Db;
 
 RestaurantReservationDbContext dbContext = new RestaurantReservationDbContext();
 
-await ListManagers();
+//await ListManagers();
 async Task ListManagers()
 {
-    var manager
+    var managers = await dbContext.Employees.Where(p => p.Position == Position.Manager).ToListAsync();
+    foreach (var manager in managers)
+    {
+        Console.WriteLine($"id: {manager.EmployeeId}, Name: {manager.First_Name}_{manager.Last_Name}, RestaurantId: {manager.RestaurantId}");
+    }
 }
+
+//await GetReservationsByCustomer(1);
+async Task GetReservationsByCustomer(int CustomerId)
+{
+    var reservationsCustomer = await dbContext.Customers.Where(p => p.CustomerId == CustomerId).Include(p => p.Reservations).FirstOrDefaultAsync();
+    if (reservationsCustomer is null)
+    {
+        Console.WriteLine("Unknown Customer");
+        return;
+    }
+    Console.WriteLine($"CustomerInfo: {reservationsCustomer.CustomerId} {reservationsCustomer.First_Name}_{reservationsCustomer.Last_Name}");
+    Console.WriteLine("Reservation:");
+    foreach (var reservation in reservationsCustomer.Reservations)
+    {
+        Console.WriteLine($"id : {reservation.ReservationId} Party size: {reservation.Party_size} TableId: {reservation.TableId}");
+    }
+
+}
+
+//await ListOrdersAndMenuItems(1);
+async Task ListOrdersAndMenuItems(int ReservationId)
+{
+    var ordersMenuItems = await dbContext.Orders
+        .Where(p => p.ReservationId == ReservationId)
+        .Include(t => t.OrderItems)
+        .ThenInclude(t => t.MenuItem)
+        .ToListAsync();
+    foreach (var order in ordersMenuItems)
+    {
+        Console.WriteLine($"OrderId: {order.OrderId}, Total_Amount: {order.Total_amount}, Order_Date: {order.Order_date}");
+        Console.WriteLine("--ORDER_ITEMS");
+        foreach (var item in order.OrderItems)
+        {
+            Console.WriteLine($"--ItemId: {item.ItemId},name: {item.MenuItem.Name}, Quantity: {item.Quantity}");
+        }
+    }
+}
+
+//await ListOrderedMenuItems(1);
+async Task ListOrderedMenuItems(int ReservationId)
+{
+    var ordersMenuItems = await dbContext.Orders
+    .Where(p => p.ReservationId == ReservationId)
+    .Include(t => t.OrderItems)
+    .ThenInclude(t => t.MenuItem)
+    .ToListAsync();
+    Console.WriteLine("ORDERS_ITEMS");
+    foreach (var order in ordersMenuItems)
+    {
+        foreach (var item in order.OrderItems)
+        {
+            Console.WriteLine($"-ItemId: {item.ItemId},name: {item.MenuItem.Name}, Quantity: {item.Quantity}");
+        }
+    }
+}
+
+//await CalculateAverageOrderAmount(1);
+async Task CalculateAverageOrderAmount(int EmployeeId)
+{
+    var averageOrderAmount = await dbContext.Orders.Where(p => p.EmployeeId == EmployeeId).AverageAsync(c => c.Total_amount);
+    Console.WriteLine($"Average_Order_Amount: {averageOrderAmount}");
+}
+
+//await ListCustomersReservationsUsingView();
+async Task ListCustomersReservationsUsingView()
+{
+    var customerReservationRestaurant = await dbContext.CustomerReservationsRestaurants.ToListAsync();
+    foreach (var crr in customerReservationRestaurant)
+    {
+        Console.WriteLine($"Customer_Name: {crr.Restaurent_Name}, Reservation_Date: {crr.Reservation_Date}, Party_Size: {crr.Party_Size}, Restaurent_Name: {crr.Restaurent_Name}");
+    }
+}
+
+//await ListEmployeesRestaurantUsingView();
+async Task ListEmployeesRestaurantUsingView()
+{
+    var employeesRestaurant = await dbContext.EmployeesRestaurant.ToListAsync();
+    foreach (var er in employeesRestaurant)
+    {
+        Console.WriteLine($"Employee_Name: {er.Employee_Name}, Position: {er.Position}, Restaurent_Name: {er.Restaurant_Name}, Restaurant_PhoneNumber: {er.Restaurant_PhoneNumber}");
+    }
+}
+
+
+
+
 ////
 var customerRepository = new CustomerRepository(dbContext);
 //await CreateCustomer();
@@ -56,6 +147,13 @@ async Task DeleteRestaurant()
     Console.WriteLine("Restaurant Deleted");
 }
 
+//await CalculateTotalRevenueByRestaurant(1);
+async Task CalculateTotalRevenueByRestaurant(int RestraurentId)
+{
+    var totalRevenue = await restaurantRepository.GetTotalRevenueByRestaurant(RestraurentId);
+    Console.WriteLine(totalRevenue);
+}
+
 /////////////////////
 
 var employeeRepository = new EmployeeRepository(dbContext);
@@ -63,7 +161,7 @@ var employeeRepository = new EmployeeRepository(dbContext);
 //await CreateEmployee();
 async Task CreateEmployee()
 {
-    await employeeRepository.CreateEmployeeAsync(new Employee { First_Name = "John", Last_Name = "Doe", Position = Position.Manegar, RestaurantId = 1 });
+    await employeeRepository.CreateEmployeeAsync(new Employee { First_Name = "John", Last_Name = "Doe", Position = Position.Manager, RestaurantId = 1 });
     Console.WriteLine("Employee added");
 }
 
@@ -131,6 +229,15 @@ async Task DeleteReservation()
     Console.WriteLine("Reservation Deleted");
 }
 
+await CustomersWithLargeReservations(4);
+async Task CustomersWithLargeReservations(int partySizeThreshold)
+{
+    var customers = await reservationRepository.GetCustomersWithLargeReservations(partySizeThreshold);
+    foreach (var customer in customers)
+    {
+        Console.WriteLine($"Id: {customer.CustomerId}, Name: {customer.First_Name} {customer.Last_Name}, Email: {customer.Email}");
+    }
+}
 /////////////
 
 var menuItemRepository = new MenuItemRepository(dbContext);
