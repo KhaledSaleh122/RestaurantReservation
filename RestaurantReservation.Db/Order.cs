@@ -14,7 +14,7 @@ namespace RestaurantReservation.Db
         public int EmployeeId { get; set; }
 
         public DateTime Order_date { get; set; }
-        public double Total_amount { get; set; }
+        public decimal Total_amount { get; set; }
         public Reservation Reservation { get; set; }
         public Employee Employee { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

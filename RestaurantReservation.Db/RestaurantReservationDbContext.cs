@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Runtime.InteropServices;
 
 namespace RestaurantReservation.Db
 {
@@ -15,7 +16,6 @@ namespace RestaurantReservation.Db
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<CustomerReservationsRestaurants> CustomerReservationsRestaurants { get; set; }
 
-        public DbSet<TotalRevenueForRestaurant> TotalRevenueForRestaurants { get; set; }
         public DbSet<EmployeesRestaurant> EmployeesRestaurant { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,9 +24,13 @@ namespace RestaurantReservation.Db
             );
 
         }
+        public decimal TotalRevenueForRestaurant(int restaurantId)
+             => throw new NotSupportedException();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TotalRevenueForRestaurant>().HasNoKey();
+            modelBuilder.HasDbFunction(typeof(RestaurantReservationDbContext).GetMethod(nameof(TotalRevenueForRestaurant), new[] { typeof(int) }))
+            .HasName("CalculateTotalRevenueByRestaurant");
+            modelBuilder.Entity<Order>().Property(x => x.Total_amount).HasColumnType("decimal(18, 2)");
             modelBuilder.Entity<CustomerReservationsRestaurants>().HasNoKey().ToView("CustomerReservationsRestaurants");
             modelBuilder.Entity<EmployeesRestaurant>().HasNoKey().ToView("EmployeesRestaurant");
             modelBuilder.Entity<OrderItem>()
@@ -98,11 +102,11 @@ namespace RestaurantReservation.Db
 
             // Seed data for Orders
             modelBuilder.Entity<Order>().HasData(
-                new Order { OrderId = 1, Order_date = DateTime.Now.AddDays(-1), Total_amount = 35.00, ReservationId = 1, EmployeeId = 1 },
-                new Order { OrderId = 2, Order_date = DateTime.Now.AddDays(-2), Total_amount = 50.00, ReservationId = 2, EmployeeId = 2 },
-                new Order { OrderId = 3, Order_date = DateTime.Now.AddDays(-3), Total_amount = 45.00, ReservationId = 3, EmployeeId = 3 },
-                new Order { OrderId = 4, Order_date = DateTime.Now.AddDays(-4), Total_amount = 30.00, ReservationId = 4, EmployeeId = 4 },
-                new Order { OrderId = 5, Order_date = DateTime.Now.AddDays(-5), Total_amount = 25.00, ReservationId = 5, EmployeeId = 5 }
+                new Order { OrderId = 1, Order_date = DateTime.Now.AddDays(-1), Total_amount = 35.00m, ReservationId = 1, EmployeeId = 1 },
+                new Order { OrderId = 2, Order_date = DateTime.Now.AddDays(-2), Total_amount = 50.00m, ReservationId = 2, EmployeeId = 2 },
+                new Order { OrderId = 3, Order_date = DateTime.Now.AddDays(-3), Total_amount = 45.00m, ReservationId = 3, EmployeeId = 3 },
+                new Order { OrderId = 4, Order_date = DateTime.Now.AddDays(-4), Total_amount = 30.00m, ReservationId = 4, EmployeeId = 4 },
+                new Order { OrderId = 5, Order_date = DateTime.Now.AddDays(-5), Total_amount = 25.00m, ReservationId = 5, EmployeeId = 5 }
             );
 
         }

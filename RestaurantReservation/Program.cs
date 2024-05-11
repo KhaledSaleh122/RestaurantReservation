@@ -98,8 +98,6 @@ async Task ListEmployeesRestaurantUsingView()
 }
 
 
-
-
 ////
 var customerRepository = new CustomerRepository(dbContext);
 //await CreateCustomer();
@@ -126,7 +124,6 @@ async Task DeleteCustomer()
 
 var restaurantRepository = new RestaurantRepository(dbContext);
 
-//await CreateRestaurant();
 async Task CreateRestaurant()
 {
     await restaurantRepository.CreateRestaurantAsync(new Restaurant { Name = "Sunset Bistro", Address = "123 Sunset Blvd", Phone_Number = "555-1234", Opening_Hours = 10 });
@@ -147,7 +144,7 @@ async Task DeleteRestaurant()
     Console.WriteLine("Restaurant Deleted");
 }
 
-//await CalculateTotalRevenueByRestaurant(1);
+await CalculateTotalRevenueByRestaurant(1);
 async Task CalculateTotalRevenueByRestaurant(int RestraurentId)
 {
     var totalRevenue = await restaurantRepository.GetTotalRevenueByRestaurant(RestraurentId);
@@ -229,7 +226,7 @@ async Task DeleteReservation()
     Console.WriteLine("Reservation Deleted");
 }
 
-await CustomersWithLargeReservations(4);
+//await CustomersWithLargeReservations(4);
 async Task CustomersWithLargeReservations(int partySizeThreshold)
 {
     var customers = await reservationRepository.GetCustomersWithLargeReservations(partySizeThreshold);
@@ -270,14 +267,14 @@ var orderRepository = new OrderRepository(dbContext);
 //await CreateOrder();
 async Task CreateOrder()
 {
-    await orderRepository.CreateOrderAsync(new Order { Order_date = DateTime.Now, Total_amount = 29.97, ReservationId = 4, EmployeeId = 1 });
+    await orderRepository.CreateOrderAsync(new Order { Order_date = DateTime.Now, Total_amount = 29.97m, ReservationId = 4, EmployeeId = 1 });
     Console.WriteLine("Order added");
 }
 
 //await UpdateOrder();
 async Task UpdateOrder()
 {
-    await orderRepository.UpdateOrderAsync(new Order { OrderId = 6, Order_date = DateTime.Now, Total_amount = 30.99, ReservationId = 2, EmployeeId = 1 });
+    await orderRepository.UpdateOrderAsync(new Order { OrderId = 6, Order_date = DateTime.Now, Total_amount = 30.99m, ReservationId = 2, EmployeeId = 1 });
     Console.WriteLine("Order information updated");
 }
 

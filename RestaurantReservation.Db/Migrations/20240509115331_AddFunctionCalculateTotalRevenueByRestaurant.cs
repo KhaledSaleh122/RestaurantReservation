@@ -10,10 +10,10 @@ namespace RestaurantReservation.Db.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"CREATE FUNCTION CalculateTotalRevenueByRestaurant(@RestaurantId INT)
-                                    RETURNS FLOAT
+                                    RETURNS decimal(18, 2)
                                     AS
                                     BEGIN
-                                    DECLARE @Total FLOAT;
+                                    DECLARE @Total decimal(18, 2);
 
                                     SELECT @Total = SUM(ISNULL(Orders.Total_amount, 0))
                                     FROM Restaurants

@@ -149,7 +149,7 @@ namespace RestaurantReservation.Db.Migrations
                     ReservationId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Order_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Total_amount = table.Column<double>(type: "float", nullable: false)
+                    Total_amount = table.Column<decimal>(type: "decimal(18, 2)", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -37,10 +37,10 @@ namespace RestaurantReservation
             }
         }
 
-        public async Task<double> GetTotalRevenueByRestaurant(int restaurantId)
+        public async Task<decimal> GetTotalRevenueByRestaurant(int restaurantId)
         {
-            var totalRevenue = await _context.TotalRevenueForRestaurants.FromSqlInterpolated($"SELECT dbo.CalculateTotalRevenueByRestaurant({restaurantId}) AS TotalRevenue").FirstOrDefaultAsync();
-            return totalRevenue.TotalRevenue;
+            var totalRevenue = await _context.Restaurants.Where(x => x.RestaurantId == 1).Select(x => _context.TotalRevenueForRestaurant(x.RestaurantId)).FirstOrDefaultAsync();
+            return totalRevenue;
         }
 
     }
