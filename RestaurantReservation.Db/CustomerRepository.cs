@@ -16,10 +16,26 @@ namespace RestaurantReservation
             _context = context;
         }
 
-        public async Task CreateCustomerAsync(Customer customer)
+        public async Task<List<Customer>> GetAllCustomer()
+        {
+            return await _context.Customers.ToListAsync();
+        }
+
+        public async Task<Customer?> GetCustomer(int id)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+        }
+
+        public async Task<Customer?> GetCustomer(string firstName, string lastName)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(c => c.First_Name == firstName && c.Last_Name == lastName);
+        }
+
+        public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+            return customer;
         }
 
         public async Task UpdateCustomerAsync(Customer customer)

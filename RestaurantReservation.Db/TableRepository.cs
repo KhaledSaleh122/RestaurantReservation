@@ -16,10 +16,11 @@ namespace RestaurantReservation
             _context = context;
         }
 
-        public async Task CreateTableAsync(Table table)
+        public async Task<Table> CreateTableAsync(Table table)
         {
             _context.Tables.Add(table);
             await _context.SaveChangesAsync();
+            return table;
         }
 
         public async Task UpdateTableAsync(Table table)
@@ -38,5 +39,25 @@ namespace RestaurantReservation
             }
         }
 
+        public async Task<Table?> GetTable(int restaurantId, int tableId)
+        {
+            var table = await _context.Tables.Where(t => t.TableId == tableId && t.RestaurantId == restaurantId).FirstOrDefaultAsync();
+            return table;
+        }
+
+        public async Task<List<Table>> GetAllTables()
+        {
+            return await _context.Tables.ToListAsync();
+        }
+
+        public async Task<Table?> GetTable(int tableId)
+        {
+            return await _context.Tables.Where(t => t.TableId == tableId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Table>> GetAllTables(int restaurantId)
+        {
+            return await _context.Tables.Where(t => t.RestaurantId == restaurantId).ToListAsync();
+        }
     }
 }

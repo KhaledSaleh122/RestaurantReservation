@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantReservation.Db;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,20 @@ namespace RestaurantReservation
             _context = context;
         }
 
-        public async Task CreateReservationAsync(Reservation reservation)
+        public async Task<List<Reservation>> GetAllReservations()
+        {
+            return await _context.Reservations.ToListAsync();
+        }
+
+        public async Task<Reservation?> GetReservation(int id)
+        {
+            return await _context.Reservations.FirstOrDefaultAsync(c => c.ReservationId == id);
+        }
+        public async Task<Reservation> CreateReservationAsync(Reservation reservation)
         {
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
+            return reservation;
         }
 
         public async Task UpdateReservationAsync(Reservation reservation)
@@ -48,5 +59,26 @@ namespace RestaurantReservation
             return customers;
         }
 
+        public async Task<Reservation?> GetReservation(int restaurantId, int tableId, int reservationId)
+        {
+            return await _context.Reservations.FirstOrDefaultAsync(c => c.ReservationId == reservationId && c.TableId == tableId && c.RestaurantId == restaurantId);
+        }
+
+        public async Task<List<Reservation>> GetAllReservations(int restaurantId, int tableId)
+        {
+            return await _context.Reservations.Where(c => c.RestaurantId == restaurantId && c.TableId == tableId).ToListAsync();
+        }
+
+        public async Task<List<Reservation>> GetAllReservationsCustomer(int restaurantId, int customerId)
+        {
+            return await _context.Reservations.Where(c => c.RestaurantId == restaurantId && c.CustomerId == customerId).ToListAsync();
+        }
+
+        public async Task<List<OrderItem>> GetReservationMenuItems(int reservationId)
+        {
+            var reservation = await _context.Reservations.Include(p=>p.Orders).ThenInclude(p=>p.OrderItems).FirstAsync(c => c.ReservationId == reservationId);
+            var items = reservation.Orders.SelectMany(p => p.OrderItems).ToList();
+            return items;
+        }
     }
 }

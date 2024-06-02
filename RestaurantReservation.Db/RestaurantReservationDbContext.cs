@@ -38,7 +38,6 @@ namespace RestaurantReservation.Db
                 .WithMany(p => p.Items)
                 .HasForeignKey(p => p.ItemId);
             // Seed data for Customers
-
             modelBuilder.Entity<Customer>().HasData(
                 new Customer { CustomerId = 1, First_Name = "Alice", Last_Name = "Johnson", Email = "alice.johnson@example.com", Phone_number = "123-456-7890" },
                 new Customer { CustomerId = 2, First_Name = "Bob", Last_Name = "Smith", Email = "bob.smith@example.com", Phone_number = "123-456-7891" },

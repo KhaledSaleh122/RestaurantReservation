@@ -16,10 +16,11 @@ namespace RestaurantReservation
             _context = context;
         }
 
-        public async Task CreateOrderAsync(Order order)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
+            return order;
         }
         public async Task UpdateOrderAsync(Order order)
         {
@@ -37,6 +38,19 @@ namespace RestaurantReservation
             }
         }
 
+        public async Task<List<Order>> GetAllOrders(int reservationId, int employeeId)
+        {
+            return await _context.Orders.Where(o => o.ReservationId == reservationId && o.EmployeeId == employeeId).ToListAsync();
+        }
 
+        public async Task<Order?> GetOrder(int reservationId, int employeeId, int orderId)
+        {
+            return await _context.Orders.Where(o => o.ReservationId == reservationId && o.EmployeeId == employeeId && o.OrderId == orderId).Include(c => c.OrderItems).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Order>> GetAllOrdersForEmployee(int employeeId)
+        {
+            return await _context.Orders.Where(o => o.EmployeeId == employeeId).ToListAsync();
+        }
     }
 }

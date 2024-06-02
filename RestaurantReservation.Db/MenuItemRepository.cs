@@ -16,10 +16,11 @@ namespace RestaurantReservation
             _context = context;
         }
 
-        public async Task CreateMenuItemAsync(MenuItem menuItem)
+        public async Task<MenuItem> CreateMenuItemAsync(MenuItem menuItem)
         {
             _context.MenuItems.Add(menuItem);
             await _context.SaveChangesAsync();
+            return menuItem;
         }
 
         public async Task UpdateMenuItemAsync(MenuItem menuItem)
@@ -38,5 +39,14 @@ namespace RestaurantReservation
             }
         }
 
+        public async Task<MenuItem?> GetItem(int restaurantId, int itemId)
+        {
+            return await _context.MenuItems.Where(p => p.RestaurantId == restaurantId && p.ItemId == itemId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<MenuItem>> GetAllMenuItems(int restaurantId)
+        {
+            return await _context.MenuItems.Where(p => p.RestaurantId == restaurantId).ToListAsync();
+        }
     }
 }
